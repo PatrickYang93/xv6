@@ -1,0 +1,130 @@
+<<<<<<< HEAD
+Q1
+System call entry: 0x8010ef0000085a96
+From the left to the right, the fifth and sisth bytes for
+system call entry is 'ef', however other entries are '8e'.
+=======
+21/32
+Q1
+System call entry: 0x8010ef0000085a96
+From the left to the right, the fifth and sisth bytes for
+system call entry is 'ef', however other entries are '8e'.<------how do you know the other's result?
+(-1)
+>>>>>>> d03aabc570918c33d3adde432aae2aa536255dd3
+'e' in binary is '1110' and '8' in binary is '1000'. According
+to Intel manual, the second and third bits are DPL. System
+call entry has a privilege level = 3, other entries has a
+privilege level = 0.  
+----------------------------------------------------------------------------------------------
+
+Q2
+First excuted system call is SYS_exec.
+<<<<<<< HEAD
+The value returned from 'curproc->tf->eax' is '7',
+the index '7' in syscalls array is SYS_exec.
+kstack = 0x8dfff000 sz = 0x1000. The full contents 
+of the allocated portion is listed below:
+=======
+The value returned from 'curproc->tf->eax' is '7', <--------------You should tell me which command
+you type and how does 7 corresponds to exec syscall. (-2)
+the index '7' in syscalls array is SYS_exec.
+kstack = 0x8dfff000 sz = 0x1000. The full contents 
+of the allocated portion is listed below:<-----------You don't tell me how to decide which part is
+allocated, and which isn't. (-4)
+>>>>>>> d03aabc570918c33d3adde432aae2aa536255dd3
+
+0x8dfff000:     	 0x8dffe000       0x01010101      0x01010101      0x01010101
+0x8dfff010:    	 0x01010101      0x01010101      0x01010101      0x01010101
+0x8dfff020:    	 0x01010101      0x01010101      0x01010101      0x01010101
+0x8dfff030:    	 0x01010101      0x01010101      0x01010101      0x01010101
+        .
+        .
+        .
+0x8dfffe10:     0x8dfffe30       0x80103624       0x80112780      0x00000001
+0x8dfffe20:     0x8dfffe40       0x8010416a       0x00000082      0x00000000
+0x8dfffe30:     0x8dfffe50       0x80103624       0x80112780      0x00000000
+0x8dfffe40:     0x8dfffe60       0x80103624       0x8dfffeec        0x8dfffe6c
+0x8dfffe50:     0x80103624      0x80103624      0x80112d54      0x8dfffe7c
+0x8dfffe60:     0x80103624      0x80112d20      0x00000000      0x8dfffe8c
+0x8dfffe70:     0x80103624      0x00000086      0x00000000      0x8dfffe9c
+0x8dfffe80:     0x80103624      0x80112780      0x00000001      0x8dfffeac
+0x8dfffe90:     0x80103624      0x00000082      0x00000000      0x8dfffebc
+0x8dfffea0:     0x80103624      0x8010b5c0      0x00000000      0x8dfffecc
+0x8dfffeb0:     0x80103624      0x00000082      0x00000000      0x8dfffedc
+0x8dfffec0:     0x80103624      0x80112780      0x00000001      0x8dfffeec
+0x8dfffed0:     0x8010416a      0x00000086      0x00000000      0x8dfffefc
+0x8dfffee0:     0x80103624      0x80112780      0x8dffff08         0x80103624
+0x8dfffef0:      0x801041dc      0x00000000      0x8dffff18        0x80103624
+0x8dffff00:      0x80112d54      0x00000000      0x8dffff28        0x8010417d
+0x8dffff10:      0x00000200      0x00000000      0x8dffff28        0x8010412f
+0x8dffff20:      0x8dffffb4        0x00000000      0x8dffff38        0x801036cc
+0x8dffff30:      0x00000200      0x8dffffb4        0x8dffff58        0x8010467d
+0x8dffff40:      0x8dffffb4       0x00000000       0x8dffff58        0x801036cc
+0x8dffff50:      0x8dffffb4       0x00000000       0x8dffffa8        0x80105699
+0x8dffff60:     0x8010151c      0x80106d78       0x000003e8      0x000003ad
+0x8dffff70:     0x000000c8      0x0000001e       0x00000002      0x00000020
+0x8dffff80:     0x0000003a      0x00000000       0x00000000      0x8dffffac
+0x8dffff90:     0x801035e2      0x00000001       0x01010101      0x00000000
+----------------------------------------------------------------------------------------------
+
+<<<<<<< HEAD
+Q3
+=======
+Q3 <---Since you don't tell me how to go back and forth to the portion of the code to debug, you
+will miss 2 credits.(-2)
+>>>>>>> d03aabc570918c33d3adde432aae2aa536255dd3
+=> 0x801039ca <scheduler+90>:   mov    -0x60(%ebx),%eax 
+346           swtch(&(c->scheduler), p->context);
+
+0x801039ca <scheduler+90>:       0x00049043c7a0438b       0x244489243c890000
+0x801039da <scheduler+106>:     0x6be800000b0be804      
+
+=> 0x801039cd <scheduler+93>:   movl   $0x4,-0x70(%ebx)
+344           p->state = RUNNING;
+
+0x801039cd <scheduler+93>:       0x89000000049043c7       0x0be804244489243c   
+0x801039dd <scheduler+109>:     0x00002b6be800000b      0x86c780114c54fb81 
+0x801039ed <scheduler+125>:     0x00000000000000ac       0x2d202404c790bc75
+----------------------------------------------------------------------------------------------
+
+Q4
+=> 0x8010469d <syscall+45>:     add    $0x10,%esp
+145                 curproc->pid, curproc->name, num);
+
+The physical bass address is same as CR3, which is 'CR3=0dfbb000'
+By looking the first 12 address after virtual base address:
+
+(gdb) x /12wx 0x8dfbb000
+0x8dfbb000:     0x0df79007      0x00000000      0x00000000      0x00000000 
+0x8dfbb010:     0x00000000      0x00000000      0x00000000      0x00000000  
+0x8dfbb020:     0x00000000      0x00000000      0x00000000      0x00000000
+
+<<<<<<< HEAD
+It is easy to indicate that only 1 page is used. 
+=======
+It is easy to indicate that only 1 page is used. <--------it should be 3 pages.(-2)
+>>>>>>> d03aabc570918c33d3adde432aae2aa536255dd3
+The number of pages used can also be found by checking the size of the process. 
+Which is already captured in Q2, sz = 0x1000 = 4096. And it is exactly same as the
+size of one page. 
+
+First dozen of user process:
+(gdb) x /12i 0x8dfbb000     
+0x8dfbb000:  pop    %es   
+0x8dfbb001:  nop     
+0x8dfbb002:  (bad)    
+0x8dfbb003:  or     $0x0,%eax   
+0x8dfbb008:  add    %al,(%eax)   
+0x8dfbb00a:  add    %al,(%eax)   
+0x8dfbb00c:  add    %al,(%eax)      
+0x8dfbb00e:  add    %al,(%eax)    
+0x8dfbb010:  add    %al,(%eax)   
+0x8dfbb012:  add    %al,(%eax)  
+0x8dfbb014:  add    %al,(%eax)  
+0x8dfbb016:  add    %al,(%eax)
+----------------------------------------------------------------------------------------------
+<<<<<<< HEAD
+END
+=======
+END
+>>>>>>> d03aabc570918c33d3adde432aae2aa536255dd3
